@@ -9,8 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        include:
-          - node: [14, 16, 18, 20]
+        node: [14, 16, 18, 20]
     steps:
       - name: Load repository
         uses: actions/checkout@master
