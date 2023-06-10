@@ -34,9 +34,9 @@ jobs:
       - name: Build
         run: npm run build
       - name: Pack
-        run: npm pack --pack-destination=package
+        run: npm pack
       - name: Save Result
         uses: actions/upload-artifact@v3
         with:
-          name: express-proxyfile- ${{matrix.node}}
-          path: package
+          name: express-proxyfile-${{matrix.node}}
+          path: express-proxyfile-*.tgz
