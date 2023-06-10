@@ -4,6 +4,9 @@
   "description": "",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/"
+  ],
   "scripts": {
     "prebuild": "rm -rf dist && barrelsby --delete -d lib",
     "build": "tsc -p tsconfig.json"

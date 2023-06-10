@@ -1,0 +1,43 @@
+on: push
+name: CI
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  build:
+    name: Build, Test and Analyze
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - node: [14, 16, 18, 20]
+    steps:
+      - name: Load repository
+        uses: actions/checkout@master
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: ${{matrix.node}}
+          cache: npm
+          cache-dependency-path: "**/package-lock.json"
+      - name: Cache node modules
+        id: cache-node-modules
+        uses: actions/cache@v3
+        env:
+          cache-name: node-modules
+        with:
+          path: |
+            **/node_modules
+          key: ${{ runner.os }}-${{matrix.node}}-${{ hashFiles('**/package-lock.json') }}
+      - name: Install dependencies
+        if: steps.cache-node-modules.outputs.cache-hit == false
+        run: npm ci
+      - name: Build
+        run: npm run build
+      - name: Pack
+        run: npm pack --pack-destination=package
+      - name: Save Result
+        uses: actions/upload-artifact@v3
+        with:
+          name: express-proxyfile- ${{matrix.node}}
+          path: package
